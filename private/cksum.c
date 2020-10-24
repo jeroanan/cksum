@@ -39,17 +39,30 @@
 
 #define AUTHORS proper_name ("Q. Frank Xia")
 
+#include "gnulib/config.h"
+#include "gnulib/gllib/fcntl.h"
+#include "gnulib/gllib/intprops.h"
+#include "gnulib/gllib/quotearg.h"
+#include <errno.h>
 #include <stdio.h>
+#include <string.h>
 #include <sys/types.h>
 #include <stdint.h>
-# include "die.h"
+#include <unistd.h>
+#include <stdlib.h>
+#include "die.h"
+#include "gnulib/gllib/error.h"
+#include "gnulib/gllib/xbinary-io.h"
+#include "fadvise/fadvise.h"
+//#include "system.h"
 /*
-#include "system.h"
-#include "fadvise.h"
-#include "xbinary-io.h"
 # include "long-options.h"
-# include "error.h"
 */
+
+#define STREQ(a, b)     (strcmp (a, b) == 0)
+
+#define quotef(arg) \
+  quotearg_n_style_colon (0, shell_escape_quoting_style, arg)
 
 /* Number of bytes to read at once.  */
 # define BUFLEN (1 << 16)
@@ -192,6 +205,7 @@ cksum (const char *file, bool print_name)
   return true;
 }
 
+/*
 void
 usage (int status)
 {
@@ -214,10 +228,12 @@ Print CRC checksum and byte counts of each FILE.\n\
     }
   exit (status);
 }
-
+*/
 int
 main (int argc, char **argv)
 {
+  return 1;
+  /*
   int i;
   bool ok;
 
@@ -229,8 +245,6 @@ main (int argc, char **argv)
 
   atexit (close_stdout);
 
-  /* Line buffer stdout to ensure lines are written atomically and immediately
-     so that processes running in parallel do not intersperse their output.  */
   setvbuf (stdout, NULL, _IOLBF, 0);
 
   parse_gnu_standard_options_only (argc, argv, PROGRAM_NAME, PACKAGE, Version,
@@ -250,5 +264,6 @@ main (int argc, char **argv)
   if (have_read_stdin && fclose (stdin) == EOF)
     die (EXIT_FAILURE, errno, "-");
   return ok ? EXIT_SUCCESS : EXIT_FAILURE;
+  */
 }
 

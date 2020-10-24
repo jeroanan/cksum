@@ -84,9 +84,38 @@ gl_source_base='gllib'
   fi
   gl_UNISTD_MODULE_INDICATOR([getdtablesize])
   gl_FUNC_GETPROGNAME
+  AC_SUBST([LIBINTL])
+  AC_SUBST([LTLIBINTL])
+  AC_REQUIRE([gl_FUNC_SETLOCALE_NULL])
+  LIB_HARD_LOCALE="$LIB_SETLOCALE_NULL"
+  AC_SUBST([LIB_HARD_LOCALE])
+  gl_INTTYPES_INCOMPLETE
   AC_REQUIRE([gl_LARGEFILE])
   gl_LIMITS_H
+  gl_LOCALCHARSET
+  dnl For backward compatibility. Some packages still use this.
+  LOCALCHARSET_TESTS_ENVIRONMENT=
+  AC_SUBST([LOCALCHARSET_TESTS_ENVIRONMENT])
+  gl_LOCALE_H
   gl_MALLOCA
+  gl_FUNC_MBRTOWC
+  if test $HAVE_MBRTOWC = 0 || test $REPLACE_MBRTOWC = 1; then
+    AC_LIBOBJ([mbrtowc])
+    if test $REPLACE_MBSTATE_T = 1; then
+      AC_LIBOBJ([lc-charset-dispatch])
+      AC_LIBOBJ([mbtowc-lock])
+      gl_PREREQ_MBTOWC_LOCK
+    fi
+    gl_PREREQ_MBRTOWC
+  fi
+  gl_WCHAR_MODULE_INDICATOR([mbrtowc])
+  gl_FUNC_MBSINIT
+  if test $HAVE_MBSINIT = 0 || test $REPLACE_MBSINIT = 1; then
+    AC_LIBOBJ([mbsinit])
+    gl_PREREQ_MBSINIT
+  fi
+  gl_WCHAR_MODULE_INDICATOR([mbsinit])
+  gl_MINMAX
   AC_REQUIRE([gl_MSVC_INVAL])
   if test $HAVE_MSVC_INVALID_PARAMETER_HANDLER = 1; then
     AC_LIBOBJ([msvc-inval])
@@ -104,6 +133,13 @@ gl_source_base='gllib'
   fi
   gl_FCNTL_MODULE_INDICATOR([open])
   gl_PATHMAX
+  gl_QUOTEARG
+  gl_FUNC_SETLOCALE_NULL
+  if test $SETLOCALE_NULL_ALL_MTSAFE = 0 || test $SETLOCALE_NULL_ONE_MTSAFE = 0; then
+    AC_LIBOBJ([setlocale-lock])
+    gl_PREREQ_SETLOCALE_LOCK
+  fi
+  gl_LOCALE_MODULE_INDICATOR([setlocale_null])
   gt_TYPE_SSIZE_T
   gl_FUNC_STAT
   if test $REPLACE_STAT = 1; then
@@ -122,6 +158,7 @@ gl_source_base='gllib'
   gl_STDDEF_H
   gl_STDINT_H
   gl_STDIO_H
+  gl_STDLIB_H
   gl_FUNC_STRERROR
   if test $REPLACE_STRERROR = 1; then
     AC_LIBOBJ([strerror])
@@ -141,6 +178,9 @@ gl_source_base='gllib'
   AC_PROG_MKDIR_P
   gl_HEADER_TIME_H
   gl_UNISTD_H
+  gl_WCHAR_H
+  gl_WCTYPE_H
+  gl_XALLOC
   m4_ifval(gl_LIBSOURCES_LIST, [
     m4_syscmd([test ! -d ]m4_defn([gl_LIBSOURCES_DIR])[ ||
       for gl_file in ]gl_LIBSOURCES_LIST[ ; do

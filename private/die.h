@@ -21,7 +21,7 @@
 
 # include <error.h>
 # include <stdbool.h>
-# include <verify.h>
+# include "gnulib/gllib/verify.h"
 
 /* Like 'error (STATUS, ...)', except STATUS must be a nonzero constant.
    This may pacify the compiler or help it generate better code.  */
