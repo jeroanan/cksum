@@ -1,3 +1,5 @@
 private/gnulib
 *.o
 *.so
+compiled/
+doc/

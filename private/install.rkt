@@ -9,7 +9,6 @@
 (define (pre-installer collections-top-path racl-path)
   (define private-path (build-path racl-path "private"))
   (define unpacked-path (path->string (build-path private-path "gnulib")))
-  (define output-path (path->string (build-path private-path "gnulib")))
   (define gnulib-path (path->string (build-path unpacked-path "gllib")))
   (define gnulib-objects (path->string (build-path gnulib-path  "*.o")))
   
@@ -28,9 +27,9 @@
   (system (string-append "gcc "cksum-output-path" "fadvise-output-path" "gnulib-objects" -shared -o "output-path" -I"gnulib-path))
   
 
-  (delete-directory/files unpacked-path))
+  (delete-directory/files unpacked-path)
   (delete-file fadvise-output-path)
-  (delete-file sum-output-path))
+  (delete-file cksum-output-path))
 
 
   
