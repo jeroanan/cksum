@@ -1,0 +1,3 @@
+private/gnulib
+*.o
+*.so

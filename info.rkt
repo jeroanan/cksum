@@ -1,0 +1,10 @@
+#lang info
+(define collection "cksum")
+(define deps '("base"))
+(define build-deps '("scribble-lib" "racket-doc"))
+(define scribblings '(("scribblings/cksum.scrbl" ())))
+(define pkg-desc "Allows for calculation of CRC checksums of files in the style of the cksum utility from GNU Coreutils. Uses code from GNU Coreutils and gnulib.")
+(define version "0.1")
+(define pre-install-collection "private/install.rkt")
+(define compile-omit-files '("private/install.rkt"))
+(define pkg-authors '(David Wilson))

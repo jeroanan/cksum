@@ -54,6 +54,8 @@
 #include "gnulib/gllib/error.h"
 #include "gnulib/gllib/xbinary-io.h"
 #include "fadvise/fadvise.h"
+#include "gnulib/gllib/inttostr.h"
+
 //#include "system.h"
 /*
 # include "long-options.h"
@@ -131,8 +133,8 @@ static bool have_read_stdin;
    If PRINT_NAME is true, print FILE next to the checksum and size.
    Return true if successful.  */
 
-static bool
-cksum (const char *file, bool print_name)
+bool
+cksum (const char *file, bool print_name, char* csum)
 {
   unsigned char buf[BUFLEN];
   uint_fast32_t crc = 0;
@@ -165,7 +167,7 @@ cksum (const char *file, bool print_name)
       unsigned char *cp = buf;
 
       if (length + bytes_read < length)
-        die (EXIT_FAILURE, 0, _("%s: file too long"), quotef (file));
+        return false;
       length += bytes_read;
       while (bytes_read--)
         crc = (crc << 8) ^ crctab[((crc >> 24) ^ *cp++) & 0xFF];
@@ -195,75 +197,13 @@ cksum (const char *file, bool print_name)
   crc = ~crc & 0xFFFFFFFF;
 
   if (print_name)
-    printf ("%u %s %s\n", (unsigned int) crc, hp, file);
+    sprintf (csum, "%u %s %s", (unsigned int) crc, hp, file);
   else
-    printf ("%u %s\n", (unsigned int) crc, hp);
+    sprintf (csum, "%u %s", (unsigned int) crc, hp);
 
   if (ferror (stdout))
-    die (EXIT_FAILURE, errno, "-: %s", _("write error"));
+    return false;
 
   return true;
-}
-
-/*
-void
-usage (int status)
-{
-  if (status != EXIT_SUCCESS)
-    emit_try_help ();
-  else
-    {
-      printf (_("\
-Usage: %s [FILE]...\n\
-  or:  %s [OPTION]\n\
-"),
-              program_name, program_name);
-      fputs (_("\
-Print CRC checksum and byte counts of each FILE.\n\
-\n\
-"), stdout);
-      fputs (HELP_OPTION_DESCRIPTION, stdout);
-      fputs (VERSION_OPTION_DESCRIPTION, stdout);
-      emit_ancillary_info (PROGRAM_NAME);
-    }
-  exit (status);
-}
-*/
-int
-main (int argc, char **argv)
-{
-  return 1;
-  /*
-  int i;
-  bool ok;
-
-  initialize_main (&argc, &argv);
-  set_program_name (argv[0]);
-  setlocale (LC_ALL, "");
-  bindtextdomain (PACKAGE, LOCALEDIR);
-  textdomain (PACKAGE);
-
-  atexit (close_stdout);
-
-  setvbuf (stdout, NULL, _IOLBF, 0);
-
-  parse_gnu_standard_options_only (argc, argv, PROGRAM_NAME, PACKAGE, Version,
-                                   true, usage, AUTHORS, (char const *) NULL);
-
-  have_read_stdin = false;
-
-  if (optind == argc)
-    ok = cksum ("-", false);
-  else
-    {
-      ok = true;
-      for (i = optind; i < argc; i++)
-        ok &= cksum (argv[i], true);
-    }
-
-  if (have_read_stdin && fclose (stdin) == EOF)
-    die (EXIT_FAILURE, errno, "-");
-  return ok ? EXIT_SUCCESS : EXIT_FAILURE;
-  */
 }
 

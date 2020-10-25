@@ -20,12 +20,12 @@
 # pragma GCC diagnostic ignored "-Wsuggest-attribute=const"
 #endif
 
-#include <config.h>
+#include "../gnulib/config.h"
 #include "fadvise.h"
 
 #include <stdio.h>
 #include <fcntl.h>
-#include "ignore-value.h"
+#include "../gnulib/gllib/ignore-value.h"
 
 void
 fdadvise (int fd, off_t offset, off_t len, fadvice_t advice)
